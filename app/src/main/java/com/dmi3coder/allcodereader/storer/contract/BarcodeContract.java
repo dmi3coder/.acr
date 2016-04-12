@@ -30,7 +30,19 @@ public final class BarcodeContract {
             "DROP TABLE IF EXISTS "+ BarcodeDbColumns.TABLE_NAME;
 
 
-    public BarcodeContract() {
+    private BarcodeContract() {
+    }
+
+
+    public static ContentValues createCV(com.dmi3coder.allcodereader.storer.bean.Barcode barcode){
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_NAME,barcode.getName());
+        values.put(COLUMN_NAME_CONTENT,barcode.getContent());
+        values.put(COLUMN_NAME_DESCRIPTION,barcode.getDescription());
+        values.put(COLUMN_NAME_FORMAT,barcode.getFormat().toString());
+        values.put(COLUMN_NAME_GROUP,barcode.getGroup());
+        values.put(COLUMN_NAME_IMAGE,barcode.getImage());
+        return values;
     }
 
     public static abstract class BarcodeDbColumns implements BaseColumns{
@@ -42,17 +54,6 @@ public final class BarcodeContract {
         public static final String COLUMN_NAME_GROUP = "sector";
         public static final String COLUMN_NAME_FORMAT = "format";
 
-    }
-
-    public static ContentValues createCV(com.dmi3coder.allcodereader.storer.bean.Barcode barcode){
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME_NAME,barcode.getName());
-        values.put(COLUMN_NAME_CONTENT,barcode.getContent());
-        values.put(COLUMN_NAME_DESCRIPTION,barcode.getDescription());
-        values.put(COLUMN_NAME_FORMAT,barcode.getFormat().toString());
-        values.put(COLUMN_NAME_GROUP,barcode.getGroup());
-        values.put(COLUMN_NAME_IMAGE,barcode.getImage());
-        return values;
     }
 
 }

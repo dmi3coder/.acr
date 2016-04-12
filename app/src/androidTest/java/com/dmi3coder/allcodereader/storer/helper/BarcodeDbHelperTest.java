@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 
 import com.dmi3coder.allcodereader.MainActivity;
 import com.dmi3coder.allcodereader.storer.bean.Barcode;
@@ -14,9 +15,11 @@ import com.google.zxing.BarcodeFormat;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.*;
 import static com.dmi3coder.allcodereader.storer.contract.BarcodeContract.BarcodeDbColumns.*;
@@ -25,13 +28,14 @@ import static com.dmi3coder.allcodereader.storer.contract.BarcodeContract.Barcod
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BarcodeDbHelperTest {
+    private static final String TAG = "BarcodeDbHelperTest";
 
     Barcode barcode = new Barcode(1L,"Paper Book",
             "4820049492224","Some simple paper book",
-            "no_image","Office Items", BarcodeFormat.EAN_13);
-    long newRowId;
-    static BarcodeDbHelper barcodeDbHelper;
+            "no_image","Test Items", BarcodeFormat.EAN_13);
+     BarcodeDbHelper barcodeDbHelper;
 
     @Before
     public void setUp() throws Exception {
@@ -44,16 +48,16 @@ public class BarcodeDbHelperTest {
 
 
     @Test
-    public void testDBInsertion() throws Exception {
+    public void A_testDbInsertion() throws Exception {
         SQLiteDatabase database = barcodeDbHelper.getWritableDatabase();
         ContentValues values = BarcodeContract.createCV(barcode);
-        newRowId = database.insert(TABLE_NAME,"null",values);
+        long newRowId = database.insert(TABLE_NAME,"null",values);
         assertNotEquals(newRowId,0L);
         assertNotEquals(newRowId,-1);
     }
 
     @Test
-    public void testDBRetrieving() throws Exception {
+    public void B_testDbRetrieving() throws Exception {
         SQLiteDatabase database = barcodeDbHelper.getReadableDatabase();
         String[] projection = {
                 _ID,
@@ -71,8 +75,37 @@ public class BarcodeDbHelperTest {
                 sortOrder);
         c.moveToFirst();
         String s = c.getString(c.getColumnIndex(COLUMN_NAME_FORMAT));
-        assertEquals(s,barcode.getFormat().toString());
         c.close();
+
+        assertEquals(s,barcode.getFormat().toString());
     }
+
+    @Test
+    public void C_testDbUpdating() throws Exception {
+        SQLiteDatabase database = barcodeDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_FORMAT,BarcodeFormat.QR_CODE.toString());
+        String selection = COLUMN_NAME_GROUP+" LIKE ?";
+        String[] selectionArgs = {barcode.getGroup()};
+        int updated = database.update(
+                TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+        );
+
+        assertNotEquals(updated,0);
+    }
+
+    @Test
+    public void D_testDbRemoving() throws Exception {
+        String selection = COLUMN_NAME_GROUP + " LIKE ?";
+        String[] selectionArgs = {barcode.getGroup()};
+        SQLiteDatabase database = barcodeDbHelper.getWritableDatabase();
+        int removed = database.delete(TABLE_NAME,selection,selectionArgs);
+
+        assertNotEquals(removed,0);
+    }
+
 
 }
