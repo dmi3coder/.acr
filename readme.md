@@ -8,7 +8,7 @@ How-to
 ```java
 mkdir ~/Projects/Android
 cd ~/Projects/Android
-git clone https://github.com/dmi3coder/.acr.git
+git clone https://github.com/dmi3coder/AllCodeReader.git
 ```
 - Android Studio -> Open an existing Android Studio project -> .acr/build.gradle
 
