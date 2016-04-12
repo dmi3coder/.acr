@@ -3,7 +3,7 @@ package com.dmi3coder.allcodereader.storer.bean;
 import java.util.List;
 
 /**
- * Created by naomi on 4/10/16.
+ * Created by dmi3coder on 4/10/16.
  */
 public class BarcodeCategory {
     private String name;

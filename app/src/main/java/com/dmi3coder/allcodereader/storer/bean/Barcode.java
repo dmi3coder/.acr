@@ -1,10 +1,12 @@
 package com.dmi3coder.allcodereader.storer.bean;
 
 
-/**
- * Created by naomi on 4/10/16.
- */
-public class Barcode  {
+import com.orm.SugarRecord;
+import com.orm.dsl.Table;
+
+
+@Table
+public class Barcode extends SugarRecord {
 
     private Long id;
     private String name;

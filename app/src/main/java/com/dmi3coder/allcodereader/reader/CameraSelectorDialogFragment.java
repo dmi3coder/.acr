@@ -1,8 +1,5 @@
 package com.dmi3coder.allcodereader.reader;
 
-/**
- * Created by naomi on 4/10/16.
- */
 
 import android.app.AlertDialog;
 import android.app.Dialog;
