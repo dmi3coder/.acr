@@ -1,4 +1,4 @@
-package com.dmi3coder.allcodereader.Reader;
+package com.dmi3coder.allcodereader.reader;
 
 /**
  * Created by naomi on 4/10/16.

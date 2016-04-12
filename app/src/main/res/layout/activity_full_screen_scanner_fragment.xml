@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <fragment android:name="com.dmi3coder.allcodereader.Reader.BarcodeScannerFragment"
+    <fragment android:name="com.dmi3coder.allcodereader.reader.BarcodeScannerFragment"
         android:id="@+id/scanner_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -1,4 +1,4 @@
-package com.dmi3coder.allcodereader.Reader;
+package com.dmi3coder.allcodereader.reader;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

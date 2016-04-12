@@ -1,18 +1,16 @@
-package com.dmi3coder.allcodereader.Writer;
+package com.dmi3coder.allcodereader.writer;
 
-/**
- * Created by naomi on 4/10/16.
- */
-import java.util.EnumMap;
-import java.util.Map;
-
-import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
@@ -21,28 +19,50 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class BarcodeWriter extends Activity {
+import java.util.EnumMap;
+import java.util.Map;
 
+/**
+ * Created by naomi on 4/10/16.
+ */
+public class BarcodeWriterFragment extends Fragment {
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
+    public static final String BARCODE_FORMAT_ARG = "format";
+    public static final String BARCODE_BARCODE_ARG = "barcode";
+
+
+    private Context context;
+
+    public static BarcodeWriterFragment newInstance(BarcodeFormat format,String barcode) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(BARCODE_FORMAT_ARG,format);
+        args.putString(BARCODE_BARCODE_ARG,barcode);
+        BarcodeWriterFragment fragment = new BarcodeWriterFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        LinearLayout l = new LinearLayout(this);
-        l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = getActivity().getApplicationContext();
+        Bundle args = getArguments();
+        LinearLayout l = new LinearLayout(context);
+        l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         l.setOrientation(LinearLayout.VERTICAL);
 
-        setContentView(l);
-
         // barcode data
-        String barcode_data = "123456";
+        String barcode_data = args.getString(BARCODE_BARCODE_ARG);
 
         // barcode image
         Bitmap bitmap = null;
-        ImageView iv = new ImageView(this);
+        ImageView iv = new ImageView(context);
 
         try {
 
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 600, 300);
+            bitmap = encodeAsBitmap(barcode_data, (BarcodeFormat) args.getSerializable(BARCODE_BARCODE_ARG), 600, 300);
             iv.setImageBitmap(bitmap);
 
         } catch (WriterException e) {
@@ -52,25 +72,13 @@ public class BarcodeWriter extends Activity {
         l.addView(iv);
 
         //barcode text
-        TextView tv = new TextView(this);
+        TextView tv = new TextView(context);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setText(barcode_data);
 
         l.addView(tv);
-
+        return l;
     }
-
-    /**************************************************************
-     * getting from com.google.zxing.client.android.encode.QRCodeEncoder
-     *
-     * See the sites below
-     * http://code.google.com/p/zxing/
-     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/EncodeActivity.java
-     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/QRCodeEncoder.java
-     */
-
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
 
     Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = contents;
