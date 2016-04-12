@@ -4,6 +4,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.dmi3coder.allcodereader.storer.bean.Barcode;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,4 +23,8 @@ public class MainActivityTest {
     public ActivityTestRule mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
 
+    @Test
+    public void testBarcodeDBCRUD() throws Exception {
+
+    }
 }
